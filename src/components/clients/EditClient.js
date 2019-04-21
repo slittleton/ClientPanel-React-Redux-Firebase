@@ -38,7 +38,7 @@ import Spinner from '../layout/Spinner';
 
   render() {
     const { client } = this.props;
-
+    const { disableBalanceOnEdit } = this.props.settings;
     if(client) {
       return       (
         <div>
@@ -114,6 +114,7 @@ import Spinner from '../layout/Spinner';
                   name="balance"
                   ref={this.balanceInput}
                   defaultValue={client.balance}
+                  disabled={disableBalanceOnEdit}
                   />
               </div>
 
@@ -138,7 +139,8 @@ export default compose(
   firestoreConnect(props => [{
     collection: 'clients', storeAs: 'client', doc: props.match.params.id
   }]),
-  connect( ({firestore: { ordered }}, props) => ({
-    client: ordered.client && ordered.client[0] //access with this.props.client
+  connect( ({firestore: { ordered }, settings }, props) => ({
+    client: ordered.client && ordered.client[0], //access with this.props.client
+    settings
   }))
 )(EditClient);
